@@ -197,6 +197,8 @@ extern uint32_t SystemCoreClock;
 #define xPortPendSVHandler                    PendSV_Handler
 #define vPortSVCHandler                       SVC_Handler
 
+#define configASSERT( x )	if( ( x ) == 0 ) { __ASM volatile("cpsid i" : : : "memory"); while(1) ; }
+
 /* Include kernel tick timer definitions */
 #include "FreeRTOS_Tick_Config.h"
 
