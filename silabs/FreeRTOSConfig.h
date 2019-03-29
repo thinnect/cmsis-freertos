@@ -101,7 +101,7 @@ extern uint32_t SystemCoreClock;
 //  <o>Kernel tick frequency [Hz] <0-0xFFFFFFFF>
 //  <i> Kernel tick rate in Hz.
 //  <i> Default: 1000
-#define configTICK_RATE_HZ                      ((TickType_t)976)
+#define configTICK_RATE_HZ                      ((TickType_t)1000) // 976 for RFR2 compat
 
 //  <o>Timer task stack depth [words] <0-65535>
 //  <i> Stack for timer task in words.
