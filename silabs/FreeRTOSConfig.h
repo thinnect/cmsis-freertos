@@ -175,7 +175,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_16_BIT_TICKS                  0
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
 #define configMAX_PRIORITIES                    56
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    16 //16
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    7<<5
 #define configKERNEL_INTERRUPT_PRIORITY         255
 
 /* Defines that include FreeRTOS functions which implement CMSIS RTOS2 API. Do not change! */
