@@ -106,7 +106,7 @@ extern uint32_t SystemCoreClock;
 //  <o>Timer task stack depth [words] <0-65535>
 //  <i> Stack for timer task in words.
 //  <i> Default: 80
-#define configTIMER_TASK_STACK_DEPTH            80 //16384
+#define configTIMER_TASK_STACK_DEPTH            256 // word is 4 bytes, so 1024
 
 //  <o>Timer task priority <0-56>
 //  <i> Timer task priority.
