@@ -84,8 +84,6 @@
 
 #include <stdint.h>
 
-#warning "node-platform default FreeRTOSConfig.h"
-
 extern uint32_t SystemCoreClock;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
