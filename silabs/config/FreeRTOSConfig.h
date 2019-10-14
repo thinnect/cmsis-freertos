@@ -88,6 +88,8 @@ extern uint32_t SystemCoreClock;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
+#define configUSE_TICKLESS_IDLE 1
+
 //  <o>Minimal stack size [words] <0-65535>
 //  <i> Stack for idle task and default task stack in words.
 //  <i> Default: 128
@@ -175,6 +177,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_16_BIT_TICKS                  0
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
 #define configMAX_PRIORITIES                    56
+#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY 255
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY    0x3F //((1<<5)+31)
 #define configKERNEL_INTERRUPT_PRIORITY         255
 
