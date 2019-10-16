@@ -93,12 +93,12 @@ extern uint32_t SystemCoreClock;
 //  <o>Minimal stack size [words] <0-65535>
 //  <i> Stack for idle task and default task stack in words.
 //  <i> Default: 128
-#define configMINIMAL_STACK_SIZE                ((uint16_t)(512))
+#define configMINIMAL_STACK_SIZE                ((uint16_t)(2048))
 
 //  <o>Total heap size [bytes] <0-0xFFFFFFFF>
 //  <i> Heap memory size in bytes.
 //  <i> Default: 8192
-#define configTOTAL_HEAP_SIZE                   ((size_t)16384)
+#define configTOTAL_HEAP_SIZE                   ((size_t)131070)
 
 //  <o>Kernel tick frequency [Hz] <0-0xFFFFFFFF>
 //  <i> Kernel tick rate in Hz.
@@ -108,7 +108,7 @@ extern uint32_t SystemCoreClock;
 //  <o>Timer task stack depth [words] <0-65535>
 //  <i> Stack for timer task in words.
 //  <i> Default: 80
-#define configTIMER_TASK_STACK_DEPTH            256 // word is 4 bytes, so 1024
+#define configTIMER_TASK_STACK_DEPTH            2048 // word is 4 bytes, so 1024
 
 //  <o>Timer task priority <0-56>
 //  <i> Timer task priority.
@@ -177,8 +177,8 @@ extern uint32_t SystemCoreClock;
 #define configUSE_16_BIT_TICKS                  0
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
 #define configMAX_PRIORITIES                    56
-#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY 255
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    0x3F //((1<<5)+31)
+#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY 7
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    0x3f//0x3F //((1<<5)+31)
 #define configKERNEL_INTERRUPT_PRIORITY         255
 
 /* Defines that include FreeRTOS functions which implement CMSIS RTOS2 API. Do not change! */
