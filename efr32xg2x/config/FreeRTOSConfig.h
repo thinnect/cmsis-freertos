@@ -69,15 +69,21 @@ extern uint32_t SystemCoreClock;
 
 /* Constants that describe the hardware and memory usage. */
 #define configCPU_CLOCK_HZ                              SystemCoreClock
-#define configMINIMAL_STACK_SIZE                        ( ( uint16_t ) 1024 )
-//#define configMINIMAL_SECURE_STACK_SIZE               ( 1024 )
+#define configMINIMAL_STACK_SIZE                        ( ( uint16_t ) 512 )
+#define configMINIMAL_SECURE_STACK_SIZE                 ( 2*configMINIMAL_STACK_SIZE )
 #define configMAX_TASK_NAME_LEN                         ( 12 )
 #define configTOTAL_HEAP_SIZE                           ( ( size_t ) ( 40 * 1024 ) )
 
+/* Sleep management configuration */
+#ifndef configUSE_TICKLESS_IDLE
+#define configUSE_TICKLESS_IDLE                         1
+#endif//configUSE_TICKLESS_IDLE
+#ifndef configEXPECTED_IDLE_TIME_BEFORE_SLEEP
+#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP           2
+#endif//configEXPECTED_IDLE_TIME_BEFORE_SLEEP
+
 /* Constants that build features in or out. */
 #define configUSE_MUTEXES                               1
-#define configUSE_TICKLESS_IDLE                         1
-#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP           2
 #define configUSE_APPLICATION_TASK_TAG                  0
 #define configUSE_NEWLIB_REENTRANT                      0
 #define configUSE_CO_ROUTINES                           0
@@ -94,8 +100,7 @@ extern uint32_t SystemCoreClock;
 
 /* Constants provided for debugging and optimisation assistance. */
 #define configCHECK_FOR_STACK_OVERFLOW                  2
-//#define configASSERT( x )                             if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
-#define configASSERT( x )   if( ( x ) == 0 ) { __ASM volatile("cpsid i" : : : "memory"); while(1) ; }
+#define configASSERT( x )                               if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
 #define configQUEUE_REGISTRY_SIZE                       0
 
 /* Software timer definitions. */
@@ -179,9 +184,10 @@ extern uint32_t SystemCoreClock;
 
 #define configSUPPORT_DYNAMIC_ALLOCATION                1
 
-#define configTASK_RETURN_ADDRESS                       0
-#define configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H       1
-#define configENABLE_BACKWARD_COMPATIBILITY             1
+/* Extra debug options */
+//#define configTASK_RETURN_ADDRESS                       0
+//#define configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H       1
+//#define configENABLE_BACKWARD_COMPATIBILITY             1
 
 //-----------------------------------------------------------------------------
 // TICKLESS IDLE functionality seems to be missing from M33 portmacro.h files

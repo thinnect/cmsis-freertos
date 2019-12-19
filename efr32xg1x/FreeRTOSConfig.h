@@ -98,7 +98,7 @@ extern uint32_t SystemCoreClock;
 //  <o>Total heap size [bytes] <0-0xFFFFFFFF>
 //  <i> Heap memory size in bytes.
 //  <i> Default: 8192
-#define configTOTAL_HEAP_SIZE                   ((size_t)32768)
+#define configTOTAL_HEAP_SIZE                   ((size_t)( 40 * 1024 ))
 
 //  <o>Kernel tick frequency [Hz] <0-0xFFFFFFFF>
 //  <i> Kernel tick rate in Hz.
@@ -108,7 +108,7 @@ extern uint32_t SystemCoreClock;
 //  <o>Timer task stack depth [words] <0-65535>
 //  <i> Stack for timer task in words.
 //  <i> Default: 80
-#define configTIMER_TASK_STACK_DEPTH            512 // word is 4 bytes, so 2048
+#define configTIMER_TASK_STACK_DEPTH            configMINIMAL_STACK_SIZE
 
 //  <o>Timer task priority <0-56>
 //  <i> Timer task priority.
@@ -136,6 +136,11 @@ extern uint32_t SystemCoreClock;
 //  <i> Callback function vApplicationStackOverflowHook implementation is required when stack checking is enabled.
 //  <i> Default: 0
 #define configCHECK_FOR_STACK_OVERFLOW          2
+
+//  <o>Record stack high address
+//  <i> When set to 1 the stack start address is saved into each task's TCB (assuming stack grows down).
+//  <i> Default: 0
+#define configRECORD_STACK_HIGH_ADDRESS         1
 
 //  <q>Use idle hook
 //  <i> Enable callback function call on each idle task iteration.
@@ -200,11 +205,5 @@ extern uint32_t SystemCoreClock;
 #define vPortSVCHandler                       SVC_Handler
 
 #define configASSERT( x )	if( ( x ) == 0 ) { __ASM volatile("cpsid i" : : : "memory"); while(1) ; }
-
-/* Include kernel tick timer definitions */
-//#include "FreeRTOS_Tick_Config.h"
-
-/* Include debug event definitions */
-//#include "freertos_evr.h"
 
 #endif /* FREERTOS_CONFIG_H */
