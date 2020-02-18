@@ -67,6 +67,8 @@
     1 tab == 4 spaces!
 */
 
+#error "This FreeRTOSConfig.h is a sample only. Copy it to your project, remove this line and modify to your needs."
+
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
