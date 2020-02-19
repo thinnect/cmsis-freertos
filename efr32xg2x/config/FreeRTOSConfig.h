@@ -41,8 +41,11 @@
  *
  * THESE PARAMETERS ARE DESCRIBED WITHIN THE 'CONFIGURATION' SECTION OF THE
  * FreeRTOS API DOCUMENTATION AVAILABLE ON THE FreeRTOS.org WEB SITE.
- * http://www.freertos.org/a00110.html
+ *
+ * See http://www.freertos.org/a00110.html.
  *----------------------------------------------------------*/
+
+#include <stdint.h>
 
 #include "em_device.h"
 
@@ -54,93 +57,114 @@ extern uint32_t SystemCoreClock;
 #define configENABLE_TRUSTZONE                          0
 #define configRUN_FREERTOS_SECURE_ONLY                  1
 
-// Replace the SysTick_Handler in port.c with xPortSysTickHandler and have
-// cmsis_os2.c SysTick_Handler call xPortSysTickHandler because it needs to
-// handle overflows for osKernelGetSysTimerCount to work correctly
-#define SysTick_Handler xPortSysTickHandler
+//  <o>Minimal stack size [words] <0-65535>
+//  <i> Stack for idle task and default task stack in words.
+//  <i> Default: 128
+#define configMINIMAL_STACK_SIZE                ((uint16_t)(512))
+#define configMINIMAL_SECURE_STACK_SIZE         (2*configMINIMAL_STACK_SIZE)
 
-/* Constants related to the behaviour or the scheduler. */
-#define configUSE_PORT_OPTIMISED_TASK_SELECTION         0
-#define configUSE_PREEMPTION                            1
-#define configUSE_TIME_SLICING                          1
-#define configMAX_PRIORITIES                            ( 56 ) // osPriorityISR
-#define configIDLE_SHOULD_YIELD                         1
-#define configUSE_16_BIT_TICKS                          0 /* Only for 8 and 16-bit hardware. */
+//  <o>Total heap size [bytes] <0-0xFFFFFFFF>
+//  <i> Heap memory size in bytes.
+//  <i> Default: 8192
+#define configTOTAL_HEAP_SIZE                   ((size_t)(40*1024))
 
-/* Constants that describe the hardware and memory usage. */
-#define configCPU_CLOCK_HZ                              SystemCoreClock
-#define configMINIMAL_STACK_SIZE                        ( ( uint16_t ) 512 )
-#define configMINIMAL_SECURE_STACK_SIZE                 ( 2*configMINIMAL_STACK_SIZE )
-#define configMAX_TASK_NAME_LEN                         ( 12 )
-#define configTOTAL_HEAP_SIZE                           ( ( size_t ) ( 40 * 1024 ) )
+//  <o>Kernel tick frequency [Hz] <0-0xFFFFFFFF>
+//  <i> Kernel tick rate in Hz.
+//  <i> Default: 1000
+#define configTICK_RATE_HZ                      ((TickType_t)1000)
 
-/* Sleep management configuration */
-#ifndef configUSE_TICKLESS_IDLE
-#define configUSE_TICKLESS_IDLE                         1
-#endif//configUSE_TICKLESS_IDLE
-#ifndef configEXPECTED_IDLE_TIME_BEFORE_SLEEP
-#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP           2
-#endif//configEXPECTED_IDLE_TIME_BEFORE_SLEEP
+//  <o>Timer task stack depth [words] <0-65535>
+//  <i> Stack for timer task in words.
+//  <i> Default: 80
+#define configTIMER_TASK_STACK_DEPTH            (configMINIMAL_STACK_SIZE)
 
-/* Constants that build features in or out. */
-#define configUSE_MUTEXES                               1
-#define configUSE_APPLICATION_TASK_TAG                  0
-#define configUSE_NEWLIB_REENTRANT                      0
-#define configUSE_CO_ROUTINES                           0
-#define configUSE_COUNTING_SEMAPHORES                   1
-#define configUSE_RECURSIVE_MUTEXES                     1
-#define configUSE_QUEUE_SETS                            0
-#define configUSE_TASK_NOTIFICATIONS                    1
-#define configUSE_TRACE_FACILITY                        1
+//  <o>Timer task priority <0-56>
+//  <i> Timer task priority.
+//  <i> Default: 40 (High)
+#define configTIMER_TASK_PRIORITY               (40) // osPriorityHigh
 
-/* Constants that define which hook (callback) functions should be used. */
-#define configUSE_IDLE_HOOK                             0
-#define configUSE_TICK_HOOK                             0
-#define configUSE_MALLOC_FAILED_HOOK                    0
+//  <o>Timer queue length <0-1024>
+//  <i> Timer command queue length.
+//  <i> Default: 5
+#define configTIMER_QUEUE_LENGTH                (60)
 
-/* Constants provided for debugging and optimisation assistance. */
-#define configCHECK_FOR_STACK_OVERFLOW                  2
+//  <q>Use time slicing
+//  <i> Enable setting to use timeslicing.
+//  <i> Default: 1
+#define configUSE_TIME_SLICING                  1
+
+//  <q>Idle should yield
+//  <i> Control Yield behaviour of the idle task.
+//  <i> Default: 1
+#define configIDLE_SHOULD_YIELD                 1
+
+//  <o>Check for stack overflow
+//    <0=>Disable <1=>Method one <2=>Method two
+//  <i> Enable or disable stack overflow checking.
+//  <i> Callback function vApplicationStackOverflowHook implementation is required when stack checking is enabled.
+//  <i> Default: 0
+#define configCHECK_FOR_STACK_OVERFLOW          2
+
+//  <o>Record stack high address
+//  <i> When set to 1 the stack start address is saved into each task's TCB (assuming stack grows down).
+//  <i> Default: 0
+#define configRECORD_STACK_HIGH_ADDRESS         1
+
+//  <q>Use idle hook
+//  <i> Enable callback function call on each idle task iteration.
+//  <i> Callback function vApplicationIdleHook implementation is required when idle hook is enabled.
+//  <i> Default: 0
+#define configUSE_IDLE_HOOK                     0
+
+//  <q>Use tick hook
+//  <i> Enable callback function call during each tick interrupt.
+//  <i> Callback function vApplicationTickHook implementation is required when tick hook is enabled.
+//  <i> Default: 0
+#define configUSE_TICK_HOOK                     0
+
+//  <q>Use deamon task startup hook
+//  <i> Enable callback function call when timer service starts.
+//  <i> Callback function vApplicationDaemonTaskStartupHook implementation is required when deamon task startup hook is enabled.
+//  <i> Default: 0
+#define configUSE_DAEMON_TASK_STARTUP_HOOK      0
+
+//  <q>Use malloc failed hook
+//  <i> Enable callback function call when out of dynamic memory.
+//  <i> Callback function vApplicationMallocFailedHook implementation is required when malloc failed hook is enabled.
+//  <i> Default: 0
+#define configUSE_MALLOC_FAILED_HOOK            0
+
+/* Defines needed by FreeRTOS to implement CMSIS RTOS2 API. Do not change! */
+#define configCPU_CLOCK_HZ                      (SystemCoreClock)
+#define configSUPPORT_STATIC_ALLOCATION         1
+#define configSUPPORT_DYNAMIC_ALLOCATION        1
+#define configUSE_PREEMPTION                    1
+#define configUSE_TIMERS                        1
+#define configUSE_MUTEXES                       1
+#define configUSE_RECURSIVE_MUTEXES             1
+#define configUSE_COUNTING_SEMAPHORES           1
+#define configUSE_TASK_NOTIFICATIONS            1
+#define configUSE_TRACE_FACILITY                1
+#define configUSE_16_BIT_TICKS                  0
+#define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
+#define configMAX_PRIORITIES                    (56) // osPriorityISR
+
+/* Defines that include FreeRTOS functions which implement CMSIS RTOS2 API. Do not change! */
+#define INCLUDE_xEventGroupSetBitsFromISR       1
+#define INCLUDE_xSemaphoreGetMutexHolder        1
+#define INCLUDE_vTaskDelay                      1
+#define INCLUDE_vTaskDelayUntil                 1
+#define INCLUDE_vTaskDelete                     1
+#define INCLUDE_xTaskGetCurrentTaskHandle       1
+#define INCLUDE_xTaskGetSchedulerState          1
+#define INCLUDE_uxTaskGetStackHighWaterMark     1
+#define INCLUDE_uxTaskPriorityGet               1
+#define INCLUDE_vTaskPrioritySet                1
+#define INCLUDE_eTaskGetState                   1
+#define INCLUDE_vTaskSuspend                    1
+#define INCLUDE_xTimerPendFunctionCall          1
+
 #define configASSERT( x )                               if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
-#define configQUEUE_REGISTRY_SIZE                       0
-
-/* Software timer definitions. */
-#define configUSE_TIMERS                                1
-#define configTIMER_TASK_PRIORITY                       ( 40 ) // osPriorityHigh
-#define configTIMER_QUEUE_LENGTH                        60
-#define configTIMER_TASK_STACK_DEPTH                    ( configMINIMAL_STACK_SIZE  )
-
-/* Set the following definitions to 1 to include the API function, or zero
- * to exclude the API function.  NOTE:  Setting an INCLUDE_ parameter to 0 is
- * only necessary if the linker does not automatically remove functions that are
- * not referenced anyway. */
-#define INCLUDE_vTaskPrioritySet                        1
-#define INCLUDE_uxTaskPriorityGet                       1
-#define INCLUDE_vTaskDelete                             1
-#define INCLUDE_vTaskCleanUpResources                   0
-#define INCLUDE_vTaskSuspend                            1
-#define INCLUDE_vTaskDelayUntil                         1
-#define INCLUDE_vTaskDelay                              1
-#define INCLUDE_uxTaskGetStackHighWaterMark             1
-#define INCLUDE_xTaskGetIdleTaskHandle                  0
-#define INCLUDE_eTaskGetState                           1
-#define INCLUDE_xTaskResumeFromISR                      0
-#define INCLUDE_xTaskGetCurrentTaskHandle               1
-#define INCLUDE_xTaskGetSchedulerState                  1
-#define INCLUDE_xSemaphoreGetMutexHolder                1
-#define INCLUDE_xTimerPendFunctionCall                  1
-
-/* This demo makes use of one or more example stats formatting functions.  These
- * format the raw data provided by the uxTaskGetSystemState() function in to
- * human readable ASCII form.  See the notes in the implementation of vTaskList()
- * within FreeRTOS/Source/tasks.c for limitations. */
-#define configUSE_STATS_FORMATTING_FUNCTIONS            1
-
-/* Dimensions a buffer that can be used by the FreeRTOS+CLI command interpreter.
- * See the FreeRTOS+CLI documentation for more information:
- * http://www.FreeRTOS.org/FreeRTOS-Plus/FreeRTOS_Plus_CLI/ */
-#define configCOMMAND_INT_MAX_OUTPUT_SIZE               2048
-
-/* Interrupt priority configuration follows...................... */
 
 /* Use the system definition, if there is one. */
 #ifdef __NVIC_PRIO_BITS
@@ -168,26 +192,13 @@ extern uint32_t SystemCoreClock;
  * See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY            ( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << ( 8 - configPRIO_BITS ) )
 
-/* The #ifdef guards against the file being included from IAR assembly files. */
-#ifndef __IASMARM__
-
-    /* Constants related to the generation of run time stats. */
-    #define configGENERATE_RUN_TIME_STATS               0
-    #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
-    #define portGET_RUN_TIME_COUNTER_VALUE()            0
-    #define configTICK_RATE_HZ                          ( ( TickType_t ) 1000 )
-
-#endif /* __IASMARM__ */
-
-/* Enable static allocation. */
-#define configSUPPORT_STATIC_ALLOCATION                 1
-
-#define configSUPPORT_DYNAMIC_ALLOCATION                1
-
-/* Extra debug options */
-//#define configTASK_RETURN_ADDRESS                       0
-//#define configINCLUDE_FREERTOS_TASK_C_ADDITIONS_H       1
-//#define configENABLE_BACKWARD_COMPATIBILITY             1
+/* Sleep management configuration */
+#ifndef configUSE_TICKLESS_IDLE
+#define configUSE_TICKLESS_IDLE                         1
+#endif//configUSE_TICKLESS_IDLE
+#ifndef configEXPECTED_IDLE_TIME_BEFORE_SLEEP
+#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP           2
+#endif//configEXPECTED_IDLE_TIME_BEFORE_SLEEP
 
 //-----------------------------------------------------------------------------
 // TICKLESS IDLE functionality seems to be missing from M33 portmacro.h files
@@ -201,5 +212,11 @@ extern uint32_t SystemCoreClock;
     #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime ) vPortSuppressTicksAndSleep( xExpectedIdleTime )
 #endif
 //-----------------------------------------------------------------------------
+
+/* Map the FreeRTOS port interrupt handlers to their CMSIS standard names. */
+// Replace the SysTick_Handler in port.c with xPortSysTickHandler and have
+// cmsis_os2.c SysTick_Handler call xPortSysTickHandler because it needs to
+// handle overflows for osKernelGetSysTimerCount to work correctly
+#define SysTick_Handler xPortSysTickHandler
 
 #endif /* FREERTOS_CONFIG_H */
