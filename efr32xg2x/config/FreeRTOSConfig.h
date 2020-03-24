@@ -72,7 +72,7 @@ extern uint32_t SystemCoreClock;
 #define configMINIMAL_STACK_SIZE                        ( ( uint16_t ) 512 )
 #define configMINIMAL_SECURE_STACK_SIZE                 ( 2*configMINIMAL_STACK_SIZE )
 #define configMAX_TASK_NAME_LEN                         ( 12 )
-#define configTOTAL_HEAP_SIZE                           ( ( size_t ) ( 40 * 1024 ) )
+#define configTOTAL_HEAP_SIZE                           ( ( size_t ) ( 32 * 1024 ) )
 
 /* Sleep management configuration */
 #ifndef configUSE_TICKLESS_IDLE
