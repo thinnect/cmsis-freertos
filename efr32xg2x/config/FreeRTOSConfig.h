@@ -60,7 +60,7 @@ extern uint32_t SystemCoreClock;
 //  <o>Minimal stack size [words] <0-65535>
 //  <i> Stack for idle task and default task stack in words.
 //  <i> Default: 128
-#define configMINIMAL_STACK_SIZE                ((uint16_t)(512))
+#define configMINIMAL_STACK_SIZE                ((uint16_t)(256))
 #define configMINIMAL_SECURE_STACK_SIZE         (2*configMINIMAL_STACK_SIZE)
 
 //  <o>Total heap size [bytes] <0-0xFFFFFFFF>
