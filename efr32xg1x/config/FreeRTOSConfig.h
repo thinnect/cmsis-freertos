@@ -56,6 +56,11 @@ extern uint32_t SystemCoreClock;
 //  <i> Default: 128
 #define configMINIMAL_STACK_SIZE                ((uint16_t)(512))
 
+//  <o>Application allocated heap <0-1>.
+//  <i> If heap is allocated by user or OS.
+//  <i> Default: ?
+#define configAPPLICATION_ALLOCATED_HEAP        0
+
 //  <o>Total heap size [bytes] <0-0xFFFFFFFF>
 //  <i> Heap memory size in bytes.
 //  <i> Default: 8192

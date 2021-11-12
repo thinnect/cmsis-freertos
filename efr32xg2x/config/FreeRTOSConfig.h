@@ -68,6 +68,11 @@ extern uint32_t SystemCoreClock;
 //  <i> Default: 8192
 #define configTOTAL_HEAP_SIZE                   ((size_t)(32*1024))
 
+//  <o>Application allocated heap <0-1>.
+//  <i> If heap is allocated by user or OS.
+//  <i> Default: ?
+#define configAPPLICATION_ALLOCATED_HEAP        0
+
 //  <o>Kernel tick frequency [Hz] <0-0xFFFFFFFF>
 //  <i> Kernel tick rate in Hz.
 //  <i> Default: 1000
