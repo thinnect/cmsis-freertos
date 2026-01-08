@@ -132,7 +132,7 @@ extern uint32_t SystemCoreClock;
 //  <i> Enable callback function call when out of dynamic memory.
 //  <i> Callback function vApplicationMallocFailedHook implementation is required when malloc failed hook is enabled.
 //  <i> Default: 0
-#define configUSE_MALLOC_FAILED_HOOK            0
+#define configUSE_MALLOC_FAILED_HOOK            1
 
 /* Defines needed by FreeRTOS to implement CMSIS RTOS2 API. Do not change! */
 #define configCPU_CLOCK_HZ                      (SystemCoreClock)
